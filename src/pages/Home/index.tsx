@@ -1,21 +1,26 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import dictionaryImg from "../../../public/dictionary.png";
 import { useQuery } from "@tanstack/react-query";
-import { getRandomWord } from "../../api/words.api";
-import { useRef } from "react";
+import { getWordDefinition } from "../../api/words.api";
+import { useRef, useState } from "react";
 
 import { FcSpeaker } from "react-icons/fc";
 import Form from "../../components/Form";
+import Card from "../../components/Card";
 
 type Input = {
   search: string;
 };
 const Home = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const [word, setWord] = useState("hello");
 
   const query = useQuery({
     queryKey: ["randomWord"],
-    queryFn: getRandomWord,
+    queryFn: async () => {
+      return await getWordDefinition(word);
+    },
+    retry: false,
   });
 
   const {
@@ -24,17 +29,34 @@ const Home = () => {
     formState: { errors },
   } = useForm<Input>();
 
+  /**
+   *
+   * @param data
+   */
   const onSubmit: SubmitHandler<Input> = (data) => {
-    console.log(data);
+    setWord(data.search);
+    setTimeout(() => {
+      query.refetch();
+    }, 10);
   };
 
-  if (query.status === "pending" || query.isLoading)
-    return <div>Loading...</div>;
+  if (query.status === "pending" || query.isLoading) return <div></div>;
 
-  const phonetics = query?.data[0]?.phonetics?.filter((p: any) => {
-    return p.text && p.audio;
-  });
+  /**
+   *  get phonetics object
+   * @returns phonetics object
+   */
+  const phonetics = () => {
+    const result = query?.data[0]?.phonetics?.filter((p: any) => {
+      return p.text && p.audio;
+    });
 
+    return result.length > 0 ? result[0] : {};
+  };
+
+  /**
+   * Play audio
+   */
   const playAudio = () => {
     audioRef.current?.play();
   };
@@ -64,55 +86,57 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="card card-side bg-base-100 shadow-xl mx-8">
-        <div className="card-body">
-          <div className="flex w-full min-w-[400px] justify-between items-center">
-            <div></div>
-            <div>
-              <h2 className="card-title">
-                {query?.data[0]?.word?.toUpperCase()}
-              </h2>
-              <p className="text-secondary">{phonetics[0]?.text}</p>
-            </div>
-
-            <button onClick={playAudio} className="btn">
-              <FcSpeaker size={30} />
-            </button>
-          </div>
+      {query.status === "error" ? (
+        <div>Word not found</div>
+      ) : (
+        <Card className="mx-8 mb-4">
+          <Card.Header
+            title={query?.data[0]?.word?.toUpperCase()}
+            subheading={phonetics()[0]?.text}
+          >
+            {phonetics()?.audio && (
+              <button onClick={playAudio} className="btn">
+                <FcSpeaker size={30} />
+              </button>
+            )}
+          </Card.Header>
           <audio
             className="hidden"
             ref={audioRef}
-            src={phonetics[0]?.audio}
+            src={phonetics()?.audio}
             controls
           />
 
-          {query?.data[0]?.meanings?.map((meaning: any) => {
-            return (
-              <div className="" key={meaning.partOfSpeech}>
-                <li className="divider-text text-secondary">
-                  {meaning.partOfSpeech}
-                </li>
-                <div className="grid grid-cols-2 gap-2">
-                  {meaning.definitions.map((definition: any) => {
-                    return (
-                      <div key={definition.definition}>
-                        <div className="text-white pl-4">
-                          {definition.definition}
-                        </div>
-                        {definition.example && (
-                          <div className="text-gray pl-8">
-                            Example: {definition.example}
+          <div className="body">
+            {query?.data[0]?.meanings?.map((meaning: any) => {
+              return (
+                <div key={meaning.partOfSpeech}>
+                  <li className="divider-text text-secondary">
+                    {meaning.partOfSpeech}
+                  </li>
+                  <div className="grid grid-cols-2 gap-2">
+                    {meaning.definitions.map((definition: any) => {
+                      return (
+                        <div key={definition.definition}>
+                          <div className="text-white pl-4">
+                            {definition.definition}
                           </div>
-                        )}
-                      </div>
-                    );
-                  })}
+                          {definition.example && (
+                            <div className="text-gray pl-8">
+                              Example: {definition.example}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="divider"></div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+              );
+            })}
+          </div>
+        </Card>
+      )}
     </div>
   );
 };

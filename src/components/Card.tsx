@@ -20,12 +20,17 @@ const Card: FC<CardProps> & {
 type HeaderProps = {
   title: string;
   subheading?: string;
+  children?: React.ReactNode;
 };
-const Header: FC<HeaderProps> = ({ title, subheading }) => {
+const Header: FC<HeaderProps> = ({ title, subheading, children }) => {
   return (
-    <div>
-      <h2 className="card-title">{title}</h2>
-      <p className="text-secondary">{subheading}</p>
+    <div className="flex w-full min-w-[400px] justify-between items-center">
+      <div></div>
+      <div>
+        <h2 className="card-title">{title}</h2>
+        <p className="text-secondary">{subheading}</p>
+      </div>
+      <div>{children}</div>
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export const getRandomWord = async () => {
-  const url = "https://api.dictionaryapi.dev/api/v2/entries/en/hello";
   const options = {
     method: "GET",
     url: "/hello.json",
@@ -10,7 +9,7 @@ export const getRandomWord = async () => {
   console.log(response);
   return response.data;
 };
-export const getWord = async (word: string) => {
+export const getWordDefinition = async (word: string) => {
   const options = {
     method: "GET",
     url: `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`,
