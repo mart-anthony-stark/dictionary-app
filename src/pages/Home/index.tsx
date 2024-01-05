@@ -7,6 +7,7 @@ import { useRef, useState } from "react";
 import { FcSpeaker } from "react-icons/fc";
 import Form from "../../components/Form";
 import Card from "../../components/Card";
+import FlatList from "../../components/FlatList";
 
 type Input = {
   search: string;
@@ -67,10 +68,6 @@ const Home = () => {
         <img src={dictionaryImg} />
         <Form onSubmit={handleSubmit(onSubmit)}>
           {/* FIX: React hook form not registering through compound component */}
-          {/* <Form.TextInput
-            {...register("search", { required: true })}
-            placeholder="Start typing any word or phrase"
-          /> */}
           <input
             {...register("search", { required: true })}
             type="text"
@@ -108,32 +105,40 @@ const Home = () => {
           />
 
           <div className="body">
-            {query?.data[0]?.meanings?.map((meaning: any) => {
-              return (
-                <div key={meaning.partOfSpeech}>
-                  <li className="divider-text text-secondary">
-                    {meaning.partOfSpeech}
-                  </li>
-                  <div className="grid grid-cols-2 gap-2">
-                    {meaning.definitions.map((definition: any) => {
-                      return (
-                        <div key={definition.definition}>
-                          <div className="text-white pl-4">
-                            {definition.definition}
-                          </div>
-                          {definition.example && (
-                            <div className="text-gray pl-8">
-                              Example: {definition.example}
+            <FlatList
+              data={query?.data[0]?.meanings}
+              keyExtractor="partOfSpeech"
+              RenderItem={(item: any) => {
+                return (
+                  <div key={item.partOfSpeech}>
+                    <li className="divider-text text-secondary">
+                      {item.partOfSpeech}
+                    </li>
+                    <div className="grid grid-cols-2 gap-2">
+                      <FlatList
+                        data={item.definitions}
+                        keyExtractor="definition"
+                        RenderItem={(item: any) => {
+                          return (
+                            <div key={item.definition}>
+                              <div className="text-white pl-4">
+                                {item.definition}
+                              </div>
+                              {item.example && (
+                                <div className="text-gray pl-8">
+                                  Example: {item.example}
+                                </div>
+                              )}
                             </div>
-                          )}
-                        </div>
-                      );
-                    })}
+                          );
+                        }}
+                      />
+                    </div>
+                    <div className="divider"></div>
                   </div>
-                  <div className="divider"></div>
-                </div>
-              );
-            })}
+                );
+              }}
+            />
           </div>
         </Card>
       )}
