@@ -27,7 +27,7 @@ const Header: FC<HeaderProps> = ({ title, subheading, children }) => {
     <div className="flex w-full min-w-[400px] justify-between items-center">
       <div></div>
       <div>
-        <h2 className="card-title">{title}</h2>
+        <h2 className="card-title text-white">"{title}"</h2>
         <p className="text-secondary">{subheading}</p>
       </div>
       <div>{children}</div>
