@@ -33,15 +33,15 @@ const WinnerDialog = () => {
             className="input input-bordered"
           />
           {/* add credit card cvv and number and year */}
-          <div className="grid grid-cols-2">
-            <div>
+          <div className="flex justify-between gap-2">
+            <div className="w-full">
               <label className="label">
                 <span className="label-text">Credit Card Number</span>
               </label>
               <input
                 type="text"
                 placeholder="1234 1234 1234 1234"
-                className="input input-bordered"
+                className="input input-bordered w-full"
               />
             </div>
             <div>
@@ -51,7 +51,7 @@ const WinnerDialog = () => {
               <input
                 type="text"
                 placeholder="123"
-                className="input input-bordered"
+                className="input input-bordered w-[100px]"
               />
             </div>
           </div>
