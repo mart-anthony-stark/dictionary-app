@@ -48,9 +48,15 @@ const Home = () => {
    * @returns phonetics object
    */
   const phonetics = () => {
-    const result = query?.data[0]?.phonetics?.filter((p: any) => {
+    let result = query?.data[0]?.phonetics?.filter((p: any) => {
       return p.text && p.audio;
     });
+
+    if (result.length === 0) {
+      result = query?.data[0]?.phonetics?.filter((p: any) => {
+        return p.text || p.audio;
+      });
+    }
 
     return result.length > 0 ? result[0] : {};
   };
@@ -89,7 +95,7 @@ const Home = () => {
         <Card className="mx-8 mb-4">
           <Card.Header
             title={query?.data[0]?.word?.toUpperCase()}
-            subheading={phonetics()[0]?.text}
+            subheading={phonetics()?.text}
           >
             {phonetics()?.audio && (
               <button onClick={playAudio} className="btn">
