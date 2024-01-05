@@ -8,7 +8,7 @@ function App() {
     <>
       <div className="bg-primary min-h-[100vh]">
         <Navbar>
-          <Navbar.Title text="Dict App" />
+          <Navbar.Title text="Dicktionary" />
         </Navbar>
         <Router>
           <Routes>

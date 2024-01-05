@@ -1,9 +1,10 @@
 import axios from "axios";
 
 export const getRandomWord = async () => {
+  const url = "https://api.dictionaryapi.dev/api/v2/entries/en/hello";
   const options = {
     method: "GET",
-    url: "https://api.dictionaryapi.dev/api/v2/entries/en/hello",
+    url: "/hello.json",
   };
   const response = await axios.request(options);
   console.log(response);
