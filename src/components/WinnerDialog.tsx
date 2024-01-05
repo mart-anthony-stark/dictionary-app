@@ -1,10 +1,25 @@
+import { useEffect } from "react";
+
 const WinnerDialog = () => {
+  useEffect(() => {
+    // add keydown event listener to window to prevent escape key from closing modal
+    const handleKeyDown = (e: any) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
-    <dialog id="my_modal_1" className="modal">
+    <dialog id="winner_modal" className="modal">
       <form className="modal-box">
         <h3 className="font-bold text-lg">Congratulations!</h3>
         <p className="py-4">
-          You have won Iphone 14 pro max. Please enter your credit card details
+          You have won iPhone 14 Pro Max. Please enter your credit card details
           to claim your prize.
         </p>
         {/* Add credit card fields */}
