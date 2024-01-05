@@ -3,15 +3,18 @@ import React, { FC } from "react";
 type FormProps = {
   onSubmit: any;
   children: React.ReactNode;
+  style: any;
 };
 const Form: FC<FormProps> & {
   TextInput: FC<TextInputProps>;
   Action: FC<ActionProps>;
-} = ({ onSubmit, children }) => {
+  className?: any;
+} = ({ onSubmit, children, ...props }) => {
   return (
     <form
+      {...props}
       onSubmit={onSubmit}
-      className="flex gap-2 w-full justify-center items-center"
+      className={`flex gap-2 w-full justify-center items-center`}
     >
       {children}
     </form>

@@ -70,9 +70,12 @@ const Home = () => {
 
   return (
     <div className="flex flex-col items-center min-h-[90vh] gap-2">
-      <div className="mt-8 flex flex-col items-center gap-2 w-full">
+      <div className="mt-8  flex flex-col items-center gap-2 w-full">
         <img src={dictionaryImg} />
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form
+          onSubmit={handleSubmit(onSubmit)}
+          style={{ paddingLeft: "2rem", paddingRight: "2rem" }}
+        >
           {/* FIX: React hook form not registering through compound component */}
           <input
             {...register("search", { required: true })}
@@ -120,7 +123,7 @@ const Home = () => {
                     <li className="divider-text text-secondary">
                       {item.partOfSpeech}
                     </li>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid sm:grid-cols-2 grid-cols-1 gap-2">
                       <FlatList
                         data={item.definitions}
                         keyExtractor="definition"
@@ -131,7 +134,7 @@ const Home = () => {
                                 {item.definition}
                               </div>
                               {item.example && (
-                                <div className="text-gray pl-8">
+                                <div className="text-gray-400 pl-8">
                                   Example: {item.example}
                                 </div>
                               )}
