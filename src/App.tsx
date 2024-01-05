@@ -4,14 +4,14 @@ import routes from "./routes";
 import Navbar from "./components/Navbar";
 import { useEffect } from "react";
 import Dialog from "./components/WinnerDialog";
+import { showModal } from "./utils";
 
 function App() {
   useEffect(() => {
-    const dialog = document.getElementById("my_modal_1") as any;
-    // show modol using attribute
-    setTimeout(() => {
-      dialog.showModal();
-    }, 5000);
+    const interval = showModal();
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   return (
