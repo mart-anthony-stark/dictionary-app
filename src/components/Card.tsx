@@ -10,7 +10,7 @@ const Card: FC<CardProps> & {
   return (
     <div
       {...props}
-      className={`card card-side bg-base-100 shadow-xl my-2 ${props.className}`}
+      className={`card card-side bg-[#1D232A] shadow-xl my-2 ${props.className}`}
     >
       <div className="card-body">{children}</div>
     </div>
