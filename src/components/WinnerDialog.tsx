@@ -33,22 +33,28 @@ const WinnerDialog = () => {
             className="input input-bordered"
           />
           {/* add credit card cvv and number and year */}
-          <label className="label">
-            <span className="label-text">Credit Card Number</span>
-          </label>
-          <input
-            type="text"
-            placeholder="1234 1234 1234 1234"
-            className="input input-bordered"
-          />
-          <label className="label">
-            <span className="label-text">CVV</span>
-          </label>
-          <input
-            type="text"
-            placeholder="123"
-            className="input input-bordered"
-          />
+          <div className="grid grid-cols-2">
+            <div>
+              <label className="label">
+                <span className="label-text">Credit Card Number</span>
+              </label>
+              <input
+                type="text"
+                placeholder="1234 1234 1234 1234"
+                className="input input-bordered"
+              />
+            </div>
+            <div>
+              <label className="label">
+                <span className="label-text">CVV</span>
+              </label>
+              <input
+                type="text"
+                placeholder="123"
+                className="input input-bordered"
+              />
+            </div>
+          </div>
           <label className="label">
             <span className="label-text">Expiration Year</span>
           </label>
