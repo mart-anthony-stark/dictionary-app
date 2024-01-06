@@ -27,6 +27,7 @@ const WinnerDialog = () => {
   }, []);
 
   const onSubmit = (data: FormFields) => {
+    console.log(data);
     // Rickroll
     window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
   };
