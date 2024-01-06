@@ -1,15 +1,19 @@
-import React, { FC } from "react";
-import { useFormContext } from "react-hook-form";
+import { FC } from "react";
+import { FieldErrors, useFormContext } from "react-hook-form";
+import {
+  ActionProps,
+  FieldErrorProps,
+  FormFields,
+  FormProps,
+  HeaderProps,
+  TextInputProps,
+} from "../types/Form.type";
 
-type FormProps = {
-  onSubmit: any;
-  children: React.ReactNode;
-  style: any;
-};
 const Form: FC<FormProps> & {
   TextInput: FC<TextInputProps>;
   Action: FC<ActionProps>;
-  className?: any;
+  Header: FC<HeaderProps>;
+  FieldError: FC<FieldErrorProps>;
 } = ({ onSubmit, children, ...props }) => {
   return (
     <form
@@ -22,11 +26,13 @@ const Form: FC<FormProps> & {
   );
 };
 
-type TextInputProps = {
-  placeholder: string;
-  name: string;
-  validator?: any;
-  default?: string;
+const Header: FC<HeaderProps> = ({ title, subheading }) => {
+  return (
+    <>
+      <h3 className="font-bold text-lg">{title}</h3>
+      {subheading && <p className="py-4">{subheading}</p>}
+    </>
+  );
 };
 
 const TextInput: FC<TextInputProps> = (props) => {
@@ -36,15 +42,27 @@ const TextInput: FC<TextInputProps> = (props) => {
       {...register(props.name, props.validator)}
       type="text"
       placeholder={props.placeholder}
-      className="input input-bordered w-full max-w-md"
+      className={`input input-bordered w-full max-w-md ${props.className}`}
     />
   );
 };
 
-type ActionProps = {
-  children: React.ReactNode;
-  onClick?: () => void;
+const FieldError: FC<FieldErrorProps> = ({ name, errorMessage }) => {
+  let {
+    formState: { errors },
+  } = useFormContext<FormFields>();
+  let error = errors[name as keyof FieldErrors<FormFields>];
+  return (
+    <>
+      {error && (
+        <div className="text-error ml-2">
+          {error.message || errorMessage || "This field is required"}
+        </div>
+      )}
+    </>
+  );
 };
+
 const Action: FC<ActionProps> = ({ children, ...props }) => {
   return (
     <button className="btn bg-secondary text-primary" {...props}>
@@ -55,5 +73,7 @@ const Action: FC<ActionProps> = ({ children, ...props }) => {
 
 Form.TextInput = TextInput;
 Form.Action = Action;
+Form.Header = Header;
+Form.FieldError = FieldError;
 
 export default Form;
