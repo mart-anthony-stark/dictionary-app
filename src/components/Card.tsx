@@ -4,8 +4,20 @@ type CardProps = {
   children: React.ReactNode;
   className?: string;
 };
+
+type HeaderProps = {
+  title: string;
+  subheading?: string;
+  children?: React.ReactNode;
+};
+
+type BodyProps = {
+  children?: React.ReactNode;
+};
+
 const Card: FC<CardProps> & {
   Header: FC<HeaderProps>;
+  Body: FC<BodyProps>;
 } = ({ children, ...props }) => {
   return (
     <div
@@ -17,11 +29,6 @@ const Card: FC<CardProps> & {
   );
 };
 
-type HeaderProps = {
-  title: string;
-  subheading?: string;
-  children?: React.ReactNode;
-};
 const Header: FC<HeaderProps> = ({ title, subheading, children }) => {
   return (
     <div className="flex w-full min-w-[400px] justify-between items-center">
@@ -35,6 +42,11 @@ const Header: FC<HeaderProps> = ({ title, subheading, children }) => {
   );
 };
 
+const Body: FC<BodyProps> = ({ children }) => {
+  return <div className="card-body">{children}</div>;
+};
+
 Card.Header = Header;
+Card.Body = Body;
 
 export default Card;
