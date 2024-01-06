@@ -1,5 +1,5 @@
-import { SubmitHandler, useForm } from "react-hook-form";
-import dictionaryImg from "../../../public/dictionary.png";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import dictionaryImg from "/dictionary.png";
 import { useQuery } from "@tanstack/react-query";
 import { getWordDefinition } from "../../api/words.api";
 import { useRef, useState } from "react";
@@ -8,6 +8,7 @@ import { FcSpeaker } from "react-icons/fc";
 import Form from "../../components/Form";
 import Card from "../../components/Card";
 import FlatList from "../../components/FlatList";
+import Searching from "../../components/Searching";
 
 type Input = {
   search: string;
@@ -24,11 +25,11 @@ const Home = () => {
     retry: false,
   });
 
+  const methods = useForm<Input>();
   const {
-    register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Input>();
+  } = methods;
 
   /**
    *
@@ -72,28 +73,31 @@ const Home = () => {
     <div className="flex flex-col items-center min-h-[90vh] gap-2">
       <div className="mt-8  flex flex-col items-center gap-2 w-full">
         <img src={dictionaryImg} />
-        <Form
-          onSubmit={handleSubmit(onSubmit)}
-          style={{ paddingLeft: "2rem", paddingRight: "2rem" }}
-        >
-          {/* FIX: React hook form not registering through compound component */}
-          <input
-            {...register("search", { required: true })}
-            type="text"
-            placeholder="Start typing any word or phrase"
-            className="input input-bordered w-full max-w-md"
-          />
-          <Form.Action>Search</Form.Action>
-        </Form>
+        <FormProvider {...methods}>
+          <Form
+            onSubmit={handleSubmit(onSubmit)}
+            style={{ paddingLeft: "2rem", paddingRight: "2rem" }}
+          >
+            <Form.TextInput
+              name="search"
+              validator={{ required: true }}
+              placeholder="Start typing any word or phrase"
+            />
+            <Form.Action>Search</Form.Action>
+          </Form>
+        </FormProvider>
         <div>
           {errors.search && (
             <span className="text-error">This field is required</span>
           )}
         </div>
       </div>
-
       {query.status === "error" ? (
-        <div>Word not found</div>
+        query.isFetching ? (
+          <Searching />
+        ) : (
+          <div>Word not found</div>
+        )
       ) : (
         <Card className="mx-8 mb-4">
           <Card.Header
@@ -106,17 +110,18 @@ const Home = () => {
               </button>
             )}
           </Card.Header>
-          <audio
-            className="hidden"
-            ref={audioRef}
-            src={phonetics()?.audio}
-            controls
-          />
 
-          <div className="body">
+          <Card.Body>
+            <audio
+              className="hidden"
+              ref={audioRef}
+              src={phonetics()?.audio}
+              controls
+            />
+
             <FlatList
               data={query?.data[0]?.meanings}
-              keyExtractor="partOfSpeech"
+              keyExtractor={(item) => item.partOfSpeech}
               RenderItem={(item: any) => {
                 return (
                   <div key={item.partOfSpeech}>
@@ -126,7 +131,7 @@ const Home = () => {
                     <div className="grid sm:grid-cols-2 grid-cols-1 gap-2">
                       <FlatList
                         data={item.definitions}
-                        keyExtractor="definition"
+                        keyExtractor={(item) => item.definition}
                         RenderItem={(item: any) => {
                           return (
                             <div key={item.definition}>
@@ -148,7 +153,7 @@ const Home = () => {
                 );
               }}
             />
-          </div>
+          </Card.Body>
         </Card>
       )}
     </div>
