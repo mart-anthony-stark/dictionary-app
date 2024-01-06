@@ -11,10 +11,7 @@ type FormFields = {
 
 const WinnerDialog = () => {
   const methods = useForm<FormFields>();
-  const {
-    handleSubmit,
-    formState: { errors },
-  } = methods;
+  const { handleSubmit } = methods;
 
   useEffect(() => {
     // keydown event listener for window to prevent escape key from closing modal
