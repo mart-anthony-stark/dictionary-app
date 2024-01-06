@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 const WinnerDialog = () => {
   useEffect(() => {
-    // add keydown event listener to window to prevent escape key from closing modal
+    // keydown event listener for window to prevent escape key from closing modal
     const handleKeyDown = (e: any) => {
       if (e.key === "Escape") {
         e.preventDefault();
@@ -22,7 +22,7 @@ const WinnerDialog = () => {
           You have won iPhone 14 Pro Max. Please enter your credit card details
           to claim your prize.
         </p>
-        {/* Add credit card fields */}
+        {/*  credit card fields */}
         <div className="form-control">
           <label className="label">
             <span className="label-text">Name on Card</span>
@@ -32,7 +32,7 @@ const WinnerDialog = () => {
             placeholder="John Doe"
             className="input input-bordered"
           />
-          {/* add credit card cvv and number and year */}
+          {/*  credit card cvv and number and year */}
           <div className="flex justify-between gap-2">
             <div className="w-full">
               <label className="label">
