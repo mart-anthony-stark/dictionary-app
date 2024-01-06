@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { useFormContext } from "react-hook-form";
 
 type FormProps = {
   onSubmit: any;
@@ -23,29 +24,16 @@ const Form: FC<FormProps> & {
 
 type TextInputProps = {
   placeholder: string;
-  ref?: any;
   name: string;
+  validator?: any;
   default?: string;
 };
 
-// type InputFieldProps = {
-//   label: string;
-//   name: string;
-//   placeholder: string;
-//   type: string;
-//   register: any;
-//   errors: any;
-// };
 const TextInput: FC<TextInputProps> = (props) => {
-  //   const { register, formState, setValue } = useFormContext<InputFieldProps>();
-
-  //   if (props.default) {
-  //     setValue(props.name, props.default);
-  //   }
+  const { register } = useFormContext();
   return (
     <input
-      {...props}
-      //   {...register(props.name)}
+      {...register(props.name, props.validator)}
       type="text"
       placeholder={props.placeholder}
       className="input input-bordered w-full max-w-md"
@@ -53,10 +41,6 @@ const TextInput: FC<TextInputProps> = (props) => {
   );
 };
 
-/**
- * FIX: Type '{ children: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & ActionProps'.
-  Property 'onClick' does not exist on type 'IntrinsicAttributes & ActionProps'.ts(2322)
- */
 type ActionProps = {
   children: React.ReactNode;
   onClick?: () => void;
