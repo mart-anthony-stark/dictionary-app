@@ -2,7 +2,7 @@ import { FC, ReactNode } from "react";
 
 type Props = {
   data: any[];
-  keyExtractor: string;
+  keyExtractor: (item: any) => string;
   RenderItem: (item: any) => ReactNode;
 };
 
@@ -14,7 +14,7 @@ const FlatList: FC<Props> = ({
   return (
     <>
       {data?.map((item: any) => (
-        <RenderItem key={item[keyExtractor]} {...item} />
+        <RenderItem key={keyExtractor(item)} {...item} />
       ))}
     </>
   );
